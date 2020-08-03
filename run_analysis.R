@@ -1,4 +1,4 @@
-
+library(plyr)
 library(dplyr)
 
 ##Import .txt files as tibble
@@ -105,5 +105,7 @@ names(selectdata) <- listnames
 
 
 ##Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-groupdata <- group_by(selectdata, Subject, Activity)
-summarizedata <- summarise(groupdata, mean(BodyAccelerationSignalMeanX:BodyGiroscopeSignalJerkMagnitudeFourierStd))
+tidydata <- arrange(as_tibble(aggregate(. ~Subject + Activity, groupdata, mean)),Subject, Activity)
+
+##Exports the tidy dataset as .txt file
+write.table(tidydata, file = "tidydata.txt",row.name=FALSE)
